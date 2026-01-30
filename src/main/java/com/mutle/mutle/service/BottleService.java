@@ -33,7 +33,7 @@ public class BottleService {
 
     // 유리병 보내기
     @Transactional
-        public BottleCreateResponse createBottle(Long id, Long questionId, Long musicId, BottleCreateRequest request) {
+    public BottleCreateResponse createBottle(Long id, Long questionId, Long musicId, BottleCreateRequest request) {
 
         // 유저 조회 및 예외 발생
         User user = userRepository.findById(id)
@@ -44,7 +44,7 @@ public class BottleService {
                 .orElseThrow(() -> new IllegalArgumentException("오늘의 질문을 찾을 수 업습니다."));
 
         // 음악 조회 및 예외 발생
-        Music music = MusicRepository.findByMusicId(musicId)
+        Music music = musicRepository.findByMusicId(musicId)
                 .orElseThrow(() -> new IllegalArgumentException("오늘의 질문을 찾을 수 업습니다."));
 
         // 유리병 엔티티 생성

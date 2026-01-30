@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface MusicRepository extends JpaRepository<Music, Long> {
 
-    static Optional<Music> findByMusicId(Long musicId);
+    Optional<Music> findByMusicId(Long musicId);
 
 }
