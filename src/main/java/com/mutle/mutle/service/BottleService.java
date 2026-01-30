@@ -1,12 +1,7 @@
 package com.mutle.mutle.service;
 
-import com.mutle.mutle.dto.BottleCreateRequest;
-import com.mutle.mutle.dto.BottleCreateResponse;
-import com.mutle.mutle.dto.BottleRandomResponse;
-import com.mutle.mutle.entity.Bottle;
-import com.mutle.mutle.entity.Music;
-import com.mutle.mutle.entity.TodayQuest;
-import com.mutle.mutle.entity.User;
+import com.mutle.mutle.dto.*;
+import com.mutle.mutle.entity.*;
 import com.mutle.mutle.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,10 +75,53 @@ public class BottleService {
 
     // 유리병 반응 남기기
     @Transactional
-    public void addReaction() {}
+    public BottleReactionCreateResponse addReaction(Long id, Long bottleId) {
+        // 유저 조회 및 예외 발생
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        // 유리병 조회 및 예외 발생
+        Bottle bottle = bottleRepository.findByBottleId(bottleId)
+                .orElseThrow(() ->  new IllegalArgumentException("존재하지 않는 유리병입니다."));
+
+        // 중복 확인
+        if (reactionRepository.existsByUserAndBottle(user, bottle)) {
+            throw new IllegalArgumentException("이미 반응을 남긴 유리병입니다.");
+        }
+
+        // 반응 엔티티 생성 및 저장
+        Reaction reaction = Reaction.builder()
+                .reactor(user)
+                .bottle(bottle)
+                .build();
+
+        Reaction savedReaction = reactionRepository.save(reaction);
+
+        // 유리병 총 반응 개수
+        bottle.setTotalCount(bottle.getTotalCount() + 1);
+
+        // 반환
+        return BottleReactionCreateResponse.builder()
+                .bottleId(bottle.getBottleId())
+                .totalCount(bottle.getTotalCount())
+                .reactionCreatedAt(savedReaction.getReactionCreatedAt()) // 엔티티의 생성 시간
+                .reactionUpdatedAt(savedReaction.getReactionUpdatedAt()) // 엔티티의 수정 시간
+                .build();
+    }
 
     //유리병 반응 조회
-    public void getReactions() {}
+    public BottleReactionGetResponse getReactions(Long bottleId) {
+
+        // 유리병 조회 및 예외 발생
+        Bottle bottle = bottleRepository.findByBottleId(bottleId)
+                .orElseThrow(() ->  new IllegalArgumentException("존재하지 않는 유리병입니다."));
+
+        // 반환
+        return BottleReactionGetResponse.builder()
+                .bottleId(bottle.getBottleId())
+                .totalCount(bottle.getTotalCount())
+                .build();
+    }
 
     // 오늘의 질문 조회
     public void getTodayQuest() {}
