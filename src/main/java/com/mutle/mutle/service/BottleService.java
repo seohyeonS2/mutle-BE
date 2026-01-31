@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
@@ -82,7 +83,7 @@ public class BottleService {
 
         // 유리병 조회 및 예외 발생
         Bottle bottle = bottleRepository.findByBottleId(bottleId)
-                .orElseThrow(() ->  new IllegalArgumentException("존재하지 않는 유리병입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유리병입니다."));
 
         // 중복 확인
         if (reactionRepository.existsByUserAndBottle(user, bottle)) {
@@ -114,7 +115,7 @@ public class BottleService {
 
         // 유리병 조회 및 예외 발생
         Bottle bottle = bottleRepository.findByBottleId(bottleId)
-                .orElseThrow(() ->  new IllegalArgumentException("존재하지 않는 유리병입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유리병입니다."));
 
         // 반환
         return BottleReactionGetResponse.builder()
@@ -124,15 +125,28 @@ public class BottleService {
     }
 
     // 오늘의 질문 조회
-    public void getTodayQuest() {}
+    public TodayQuestResponse getTodayQuest() {
+        // 오늘 날짜 구하기
+        Date today = new Date();
+
+        // 질문 조회
+        TodayQuest quest = todayQuestRepository.findByDate(today)
+                .orElseThrow(() -> new IllegalArgumentException("오늘의 질문을 찾을 수 없습니다."));
+
+        // 반환
+        return TodayQuestResponse.fromEntity(quest);
+    }
 
     // 유리병 상세페이지 조회
     public void getBottleDetail() {}
 
     // 유리병 북마크 추가
     @Transactional
-    public void addBookmark() {}
+    public void addBookmark() {
+        }
 
     // 북마크 목록 조회
-    public void getBookmarks() {}
-}
+    public void getBookmarks() {
+        }
+    }
+
