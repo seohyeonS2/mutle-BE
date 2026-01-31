@@ -31,7 +31,7 @@ public class Reaction {
     private User reactor;
 
     @Column(name = "reaction_created_at", nullable = false, updatable = false)
-    private Timestamp reationCreatedAt = Timestamp.valueOf(LocalDateTime.now());
+    private Timestamp reactionCreatedAt = Timestamp.valueOf(LocalDateTime.now());
 
     @UpdateTimestamp
     @Column(name = "reaction_updated_at", nullable = false)
