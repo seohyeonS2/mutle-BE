@@ -13,7 +13,8 @@ public enum ErrorCode {
 
     BLANK_LOGIN(400, "AUTH_101", "아이디 혹은 비밀번호를 입력하지 않았습니다"),
     USER_NOT_FOUND(404, "AUTH_103", "존재하지 않는 사용자입니다."),
-    PASSWORD_MISMATCH(401, "AUTH_102", "비밀번호가 틀렸습니다.");
+    PASSWORD_MISMATCH(401, "AUTH_102", "비밀번호가 틀렸습니다."),
+    TOKEN_ERROR(401, "AUTH_000", "인증 정보가 유효하지 않습니다.");
 
     private final int status;
     private final String code;
